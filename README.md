@@ -2,9 +2,7 @@
 
 Use Greptile reviews, MCP tools, and agent skills in OpenAI Codex.
 
-## Private test install
-
-You need GitHub access to this repository while it is private.
+## Install
 
 ```bash
 codex plugin marketplace add greptileai/greptile-codex-plugin
@@ -36,16 +34,8 @@ codex plugin list
 
 The marketplace should appear as `greptile-codex-plugins`, with the `greptile` plugin installed.
 
-## Update
+## Build provenance
 
-```bash
-codex plugin marketplace upgrade greptile-codex-plugins
-codex plugin add greptile@greptile-codex-plugins
-```
-
-Start a new Codex task after updating.
-
-## Package contents
-
-This repository contains only the distributable marketplace package. Plugin skills are built from
-the public [`greptileai/skills`](https://github.com/greptileai/skills) repository.
+- Skills source: https://github.com/greptileai/skills.git
+- Branch: main
+- Commit: 646e2dfad81e5157e97daecc802b68d3d2c4d1e4
