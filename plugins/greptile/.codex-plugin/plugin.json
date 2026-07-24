@@ -1,0 +1,42 @@
+{
+  "name": "greptile",
+  "version": "0.1.0",
+  "description": "Use Greptile review feedback in Codex to inspect PRs, fix comments, and improve coding standards.",
+  "author": {
+    "name": "Greptile",
+    "url": "https://www.greptile.com/"
+  },
+  "homepage": "https://www.greptile.com/docs",
+  "repository": "https://github.com/greptileai/greptile-codex-plugin",
+  "license": "MIT",
+  "keywords": [
+    "greptile",
+    "code-review",
+    "pull-requests",
+    "codex"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Greptile",
+    "shortDescription": "Fix Greptile review feedback from Codex",
+    "longDescription": "Use Greptile review signal from Codex to check pull requests, iterate on review comments, and improve repo-specific coding standards.",
+    "developerName": "Greptile",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Interactive",
+      "Write"
+    ],
+    "websiteURL": "https://www.greptile.com/",
+    "privacyPolicyURL": "https://www.greptile.com/privacy-policy",
+    "termsOfServiceURL": "https://www.greptile.com/terms-of-service",
+    "brandColor": "#16A34A",
+    "composerIcon": "./assets/icon.svg",
+    "logo": "./assets/logo.svg",
+    "defaultPrompt": [
+      "Check this PR with Greptile",
+      "Run a Greptile CLI review",
+      "Run greploop until this PR is clean"
+    ]
+  }
+}
