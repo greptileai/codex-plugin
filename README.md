@@ -9,13 +9,13 @@ codex plugin marketplace add greptileai/greptile-codex-plugin
 codex plugin add greptile@greptile-codex-plugins
 ```
 
-Set your Greptile API key in the shell that launches Codex:
+You can set your Greptile API key in the shell that launches Codex:
 
 ```bash
 export GREPTILE_API_KEY="your-api-key"
 ```
 
-Start a new Codex task after installation.
+Without an API key, Codex signs in through OAuth using Greptile's pre-registered `codex` client. Start a new Codex task after installation.
 
 ## Included skills
 
