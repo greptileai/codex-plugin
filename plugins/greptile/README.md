@@ -9,7 +9,7 @@ codex plugin marketplace add greptileai/greptile-codex-plugin
 codex plugin add greptile@greptile-codex-plugins
 ```
 
-Set `GREPTILE_API_KEY` in the shell that launches Codex, then start a new task.
+Set `GREPTILE_API_KEY` in the shell that launches Codex, or sign in through OAuth using Greptile's pre-registered `codex` client. Then start a new task.
 
 ## Included skills
 
@@ -19,7 +19,7 @@ Set `GREPTILE_API_KEY` in the shell that launches Codex, then start a new task.
 
 ## MCP
 
-This plugin bundles Greptile MCP configuration for reading Greptile product data such as PR comments, review state, feedback search, custom context, and review analytics. Set `GREPTILE_API_KEY` to authenticate.
+This plugin bundles Greptile MCP configuration for reading Greptile product data such as PR comments, review state, feedback search, custom context, and review analytics. It uses `GREPTILE_API_KEY` when set and OAuth otherwise.
 
 ## Build provenance
 

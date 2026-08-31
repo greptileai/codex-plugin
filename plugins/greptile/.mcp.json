@@ -4,7 +4,12 @@
       "type": "http",
       "url": "https://api.greptile.com/mcp",
       "bearer_token_env_var": "GREPTILE_API_KEY",
-      "note": "Greptile MCP v2. Uses GREPTILE_API_KEY from organization settings. Use for PR comments, review state, feedback search, custom context, and review analytics."
+      "oauth": {
+        "client_id": "codex",
+        "callback_url": "http://localhost:53692/callback/2AiqOUj99xtj",
+        "callback_port": 53692
+      },
+      "note": "Greptile MCP v2. Uses GREPTILE_API_KEY when set, otherwise OAuth with the pre-registered Codex client. Use for PR comments, review state, feedback search, custom context, and review analytics."
     }
   }
 }
