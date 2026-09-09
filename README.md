@@ -6,7 +6,7 @@ This repository is a Codex plugin marketplace. Add it directly:
 
 ```
 codex plugin marketplace add greptileai/codex-plugin
-codex plugin add greptile@greptile-codex-plugins
+codex plugin add greptile@greptile-plugin
 ```
 
 The plugin gives Codex two ways to work with Greptile:
