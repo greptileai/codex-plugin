@@ -1,12 +1,12 @@
 {
   "name": "greptile",
-  "version": "0.1.0",
-  "description": "Use Greptile review feedback in Codex to inspect PRs, fix comments, and improve coding standards.",
+  "version": "0.2.0",
+  "description": "Review your working branch, read Greptile review results, and search your organization’s knowledge base from Codex.",
   "author": {
     "name": "Greptile",
     "url": "https://www.greptile.com/"
   },
-  "homepage": "https://www.greptile.com/docs",
+  "homepage": "https://www.greptile.com/docs/mcp-v2/overview",
   "repository": "https://github.com/greptileai/greptile-codex-plugin",
   "license": "MIT",
   "keywords": [
@@ -19,8 +19,8 @@
   "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "Greptile",
-    "shortDescription": "Fix Greptile review feedback from Codex",
-    "longDescription": "Use Greptile review signal from Codex to check pull requests, iterate on review comments, and improve repo-specific coding standards.",
+    "shortDescription": "Review code and explore Greptile feedback",
+    "longDescription": "Review your working branch, read Greptile review results, and search your organization’s knowledge base from Codex.",
     "developerName": "Greptile",
     "category": "Developer Tools",
     "capabilities": [
@@ -34,9 +34,9 @@
     "composerIcon": "./assets/icon.svg",
     "logo": "./assets/logo.svg",
     "defaultPrompt": [
-      "Check this PR with Greptile",
-      "Run a Greptile CLI review",
-      "Run greploop until this PR is clean"
+      "Review my current branch with Greptile",
+      "Show Greptile’s comments on this PR",
+      "Search our knowledge base for how authentication works"
     ]
   }
 }
