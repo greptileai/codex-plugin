@@ -1,28 +1,140 @@
-# Greptile Codex Plugin
+# Greptile
 
-Use Greptile from Codex to inspect PRs, address review feedback, and improve repo-specific coding standards.
+[Greptile](https://greptile.com) is an AI code review agent for GitHub and GitLab that automatically reviews pull requests. This plugin gives Codex two ways to work with it:
 
-## Install
+- the **Greptile MCP server**, for reading and resolving review results, and for searching your organization's knowledge base and coding patterns
+- the **Greptile CLI**, for dispatching a review of your working branch before a pull request exists
 
-```bash
-codex plugin marketplace add greptileai/greptile-codex-plugin
-codex plugin add greptile@greptile-codex-plugins
+They are two ends of one pipeline. The CLI dispatches reviews; the MCP server reads them back — both the ones the CLI dispatched (`source: "headless"`) and the ones Greptile ran on your pull requests (`source: "pr"`).
+
+## Setup
+
+Nothing to install and no API key to create.
+
+**MCP server.** Connect the Greptile MCP server from the plugin settings in
+Codex. Complete the browser sign-in at [auth.greptile.com](https://auth.greptile.com).
+Codex stores the MCP credentials; no `GREPTILE_API_KEY` environment variable is required.
+
+**CLI.** Ask Codex to sign in with the Greptile plugin's `login` skill and
+complete the browser flow. The CLI ships with the plugin and requires Node 22+;
+there is no npm or Homebrew installation step.
+
+The two sign-ins are separate: the CLI stores credentials in `~/.greptile/auth.json`,
+while Codex manages the MCP tokens. Sign in to whichever surface you need.
+
+## Workflows
+
+Ask Codex to sign in with Greptile or review your current branch:
+
+- **review** — Review the current branch against its base, with optional base
+  branch and review instructions.
+- **login** — Sign the bundled CLI in through browser OAuth.
+
+## Tools
+
+### Pull requests
+- `list_merge_requests` / `list_pull_requests` - List PRs, filtered by repository, branch, author, or state
+- `get_merge_request` - Detailed PR info, including which review comments have been addressed by later commits
+- `list_merge_request_comments` - All comments on a PR, with Greptile, human, and other bot comments distinguished by `sourceType`
+
+### Code reviews
+- `list_code_reviews` - List code reviews, filtered by repository or status
+- `get_code_review` - Full review body, status, summary citations, and review metadata
+- `trigger_code_review` - Start a Greptile review on a pull request (GitHub and GitLab)
+- `search_greptile_comments` - Search Greptile's review comments across every review, on pull requests and on headless CLI runs alike
+
+### Knowledge base
+- `list_knowledge_bases` - Repositories your organization has knowledge base data for
+- `list_knowledge_base_documents` - Document paths in a repository's published knowledge base
+- `get_knowledge_base_document` - Markdown body of a single knowledge base document
+- `search_knowledge_base` - Substring search across one repository's knowledge base
+
+### Custom context
+- `list_custom_context` - Your organization's coding patterns and rules
+- `get_custom_context` - Details for one entry, including evidence and linked comments
+- `search_custom_context` - Search entries by content
+- `create_custom_context` - Create a new entry, either a custom instruction (the default) or a pattern
+
+### Analytics
+- `get_analytics_overview` - Summary metrics and period changes, chart series, and repository, contributor, and pull request rankings
+- `list_analytics_findings` - Findings with severity and security totals and trends, filterable by team, repository, author, severity, or status
+- `list_analytics_filter_options` - The teams, repositories, and authors available to you as analytics filters
+
+## Example usage
+
+- "Review my current branch with Greptile and fix what it finds"
+- "Show me Greptile's comments on my current PR and help me resolve them"
+- "What issues did Greptile find on PR #123?"
+- "Search our knowledge base for how authentication works in this repo"
+
+## Bundled CLI
+
+`scripts/greptile.mjs` is the Greptile CLI, vendored from the published npm package
+`greptile` (its `dist/greptile.js`, renamed only so Node reads it as ESM without a
+sibling `package.json`). `scripts/greptile.version` records which release it is, and
+CI verifies the file byte-for-byte against that version's npm tarball, so the copy
+running here is the same one npm serves.
+
+Because the CLI ships with the plugin, it updates with the plugin — not through
+`greptile update`, `npm`, or `brew`. Any separate `greptile` you have installed is
+untouched and unused by these commands, though both share your login at
+`~/.greptile/auth.json`.
+
+## Network access
+
+This plugin registers no hooks. What it contacts:
+
+- `api.greptile.com` — the MCP server, the CLI's API, and CLI telemetry
+  (below).
+- `auth.greptile.com` — OAuth sign-in, for both surfaces.
+- `app.greptile.com` — link targets printed in review output.
+- `127.0.0.1` — a loopback listener the CLI opens to receive the OAuth
+  callback during the `login` skill, closed as soon as the redirect arrives.
+
+### Telemetry
+
+The bundled CLI reports anonymous usage events to `/v1/telemetry` on the same
+host as its API. The events are lifecycle signals — `cli_first_run`,
+`cli_login_started`, `cli_login_failed`, `cli_onboarding_started`,
+`cli_skill_installed`, `cli_skill_updated`, `cli_review_blocked`,
+`cli_update_completed` — carrying your install method, OS, architecture,
+whether the run was interactive, and which agent surface it ran under. Nothing
+else: no code, no repository or branch names, no file paths, no review content.
+Event-specific fields are fixed values: `method`, `exit_code`, `reason`, the
+version strings on an update, and the name of the Greptile-authored skill on
+the two skill events.
+
+When invoked without a TTY, the CLI cannot ask for telemetry consent.
+It falls back to **anonymous mode**: a random
+`cli:<uuid>` stored in `telemetry.json`, no account token attached, and no
+profile built on the other end. If you have separately opted in from a
+standalone `greptile` on the same machine, that decision carries over here and
+events are sent under your account instead.
+
+To turn it off, any one of these is enough:
+
+```sh
+export GREPTILE_TELEMETRY_DISABLED=1   # or DO_NOT_TRACK=1
+greptile settings set telemetry false
 ```
 
-Set `GREPTILE_API_KEY` in the shell that launches Codex, then start a new task.
+`CI=1` also disables it, and a CLI pointed at a self-hosted Greptile sends no
+telemetry at all.
 
-## Included skills
+### Downloads
 
-- `check-pr`: inspect a GitHub PR, GitLab MR, or Perforce CL for unresolved comments, failing checks, incomplete descriptions, and actionable review feedback.
-- `cli-review`: run a Greptile CLI review from the current local checkout and summarize findings.
-- `greploop`: iterate until Greptile reaches 5/5 confidence with zero unresolved comments.
+One thing here fetches software, and this is it. When a review summary
+contains a Mermaid diagram, the CLI renders it with
+`mmdr`, a small standalone binary fetched on first use from
+[github.com/1jehuang/mermaid-rs-renderer](https://github.com/1jehuang/mermaid-rs-renderer)
+into `~/.cache/greptile/bin/`. The archive is checked against a SHA-256 pinned
+per platform inside the bundle and is deleted rather than run if the hash does
+not match; the download announces itself on stderr, and failing to get it
+degrades the diagram to a link instead of failing the review. Setting
+`GREPTILE_NO_AUTO_INSTALL=1` skips it. **The `review` skill already sets that
+variable**, so the plugin does not download it — the code path is reachable
+only if you invoke the bundled CLI yourself without it.
 
-## MCP
+## Documentation
 
-This plugin bundles Greptile MCP configuration for reading Greptile product data such as PR comments, review state, feedback search, custom context, and review analytics. Set `GREPTILE_API_KEY` to authenticate.
-
-## Build provenance
-
-- Skills source: https://github.com/greptileai/skills.git
-- Branch: main
-- Commit: 646e2dfad81e5157e97daecc802b68d3d2c4d1e4
+See [greptile.com/docs/mcp-v2/overview](https://www.greptile.com/docs/mcp-v2/overview).

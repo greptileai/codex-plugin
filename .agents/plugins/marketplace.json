@@ -1,5 +1,5 @@
 {
-  "name": "greptile-codex-plugins",
+  "name": "greptile-plugin",
   "interface": {
     "displayName": "Greptile Codex Plugins"
   },

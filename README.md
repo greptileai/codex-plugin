@@ -1,41 +1,19 @@
-# Greptile Codex Plugin
+# Greptile for Codex
 
-Use Greptile reviews, MCP tools, and agent skills in OpenAI Codex.
+The official [Greptile](https://greptile.com) plugin for Codex.
 
-## Install
+This repository is a Codex plugin marketplace. Add it directly:
 
-```bash
-codex plugin marketplace add greptileai/greptile-codex-plugin
-codex plugin add greptile@greptile-codex-plugins
+```
+codex plugin marketplace add greptileai/codex-plugin
+codex plugin add greptile@greptile-plugin
 ```
 
-Set your Greptile API key in the shell that launches Codex:
+The plugin gives Codex two ways to work with Greptile:
 
-```bash
-export GREPTILE_API_KEY="your-api-key"
-```
+- the **Greptile MCP server**, for reading and resolving review results and for searching your knowledge base and coding patterns
+- the **Greptile CLI**, for reviewing your working branch before a pull request exists
 
-Start a new Codex task after installation.
+Both authenticate over OAuth against your Greptile account. There is no API key to create and nothing to install — the CLI ships with the plugin, so it needs no npm or Homebrew install, only Node 22+ on your machine.
 
-## Included skills
-
-- `check-pr`: inspect PR readiness and unresolved review feedback.
-- `cli-review`: run a Greptile CLI review from a local checkout.
-- `greploop`: fix feedback and re-review until the PR is clean.
-
-The plugin also configures the public Greptile MCP endpoint at `https://api.greptile.com/mcp`.
-
-## Verify
-
-```bash
-codex plugin marketplace list
-codex plugin list
-```
-
-The marketplace should appear as `greptile-codex-plugins`, with the `greptile` plugin installed.
-
-## Build provenance
-
-- Skills source: https://github.com/greptileai/skills.git
-- Branch: main
-- Commit: 646e2dfad81e5157e97daecc802b68d3d2c4d1e4
+See [`plugins/greptile`](./plugins/greptile) for setup, workflows, and the full tool list.

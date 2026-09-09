@@ -1,0 +1,105 @@
+name: MCP Check
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'plugins/**'
+      - '.github/workflows/mcp-check.yml'
+  pull_request:
+    paths:
+      - 'plugins/**'
+      - '.github/workflows/mcp-check.yml'
+  schedule:
+    - cron: '17 8 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Resolve the declared server config
+        run: |
+          set -euo pipefail
+          config=plugins/greptile/.mcp.json
+          jq -e 'if has("mcpServers") then .mcpServers else . end' "$config" > "$RUNNER_TEMP/servers.json"
+          if ! jq -e '.greptile | type == "object"' "$RUNNER_TEMP/servers.json" >/dev/null; then
+            echo "::error::$config does not declare a \"greptile\" server object in either the bare or mcpServers shape."
+            exit 1
+          fi
+          if ! jq -e '.greptile.url | type == "string" and startswith("https://")' "$RUNNER_TEMP/servers.json" >/dev/null; then
+            echo "::error::$config does not declare an https url for the greptile server."
+            exit 1
+          fi
+          jq -r '.greptile.url' "$RUNNER_TEMP/servers.json" > "$RUNNER_TEMP/url.txt"
+          echo "Resolved $(cat "$RUNNER_TEMP/url.txt")"
+
+      - name: Config uses OAuth discovery
+        run: |
+          set -euo pipefail
+          if jq -e '.greptile | has("headers") or has("bearer_token_env_var")' "$RUNNER_TEMP/servers.json" >/dev/null; then
+            echo "::error::MCP config must use OAuth discovery, without headers or bearer_token_env_var."
+            exit 1
+          fi
+          echo "No headers declared."
+
+      - name: Server still advertises OAuth
+        run: |
+          set -euo pipefail
+          url=$(cat "$RUNNER_TEMP/url.txt")
+          response=$(curl -sS -o /dev/null -D - -X POST "$url" \
+            -H 'Content-Type: application/json' \
+            -H 'Accept: application/json, text/event-stream' \
+            -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"list_code_reviews","arguments":{}}}' \
+            -w 'http_code=%{http_code}\n')
+          echo "$response"
+          if ! grep -q 'http_code=401' <<<"$response"; then
+            echo "::error::An unauthenticated tools/call on $url did not return 401. Codex starts the OAuth flow from that challenge."
+            exit 1
+          fi
+          if ! grep -qi '^www-authenticate:.*resource_metadata=' <<<"$response"; then
+            echo "::error::$url returned 401 without an RFC 9728 www-authenticate challenge. Codex needs resource_metadata to discover the authorization server."
+            exit 1
+          fi
+          echo "OAuth challenge present."
+
+      - name: README documents exactly the tools the server serves
+        run: |
+          set -euo pipefail
+          url=$(cat "$RUNNER_TEMP/url.txt")
+          curl -sS -X POST "$url" \
+            -H 'Content-Type: application/json' \
+            -H 'Accept: application/json, text/event-stream' \
+            -d '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{}}' > "$RUNNER_TEMP/tools.json"
+          python3 - <<'PY'
+          import json, os, re, sys
+
+          with open(os.path.join(os.environ['RUNNER_TEMP'], 'tools.json')) as fh:
+              payload = json.load(fh)
+          if 'result' not in payload:
+              sys.exit(f"::error::tools/list returned no result: {json.dumps(payload)[:400]}")
+          served = set()
+          for tool in payload['result']['tools']:
+              served.add(tool['name'])
+          if not served:
+              sys.exit('::error::tools/list returned no tools.')
+
+          readme = open('plugins/greptile/README.md').read()
+          documented = set(re.findall(r'^- `([a-z_]+)`', readme, re.M))
+          documented |= set(re.findall(r'/ `([a-z_]+)`', readme))
+
+          missing = sorted(served - documented)
+          extra = sorted(documented - served)
+          if missing:
+              print(f"::error::README does not document: {', '.join(missing)}")
+          if extra:
+              print(f"::error::README documents tools the server does not serve: {', '.join(extra)}")
+          if missing or extra:
+              sys.exit(1)
+          print(f"README documents all {len(served)} served tools.")
+          PY
