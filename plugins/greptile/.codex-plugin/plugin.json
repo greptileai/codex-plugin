@@ -7,7 +7,7 @@
     "url": "https://www.greptile.com/"
   },
   "homepage": "https://www.greptile.com/docs/mcp-v2/overview",
-  "repository": "https://github.com/greptileai/greptile-codex-plugin",
+  "repository": "https://github.com/greptileai/codex-plugin",
   "license": "MIT",
   "keywords": [
     "greptile",

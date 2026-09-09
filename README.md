@@ -5,7 +5,7 @@ The official [Greptile](https://greptile.com) plugin for Codex.
 This repository is a Codex plugin marketplace. Add it directly:
 
 ```sh
-codex plugin marketplace add greptileai/greptile-codex-plugin
+codex plugin marketplace add greptileai/codex-plugin
 codex plugin add greptile@greptile-codex-plugins
 ```
 
