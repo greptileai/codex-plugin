@@ -83,7 +83,9 @@ jobs:
               payload = json.load(fh)
           if 'result' not in payload:
               sys.exit(f"::error::tools/list returned no result: {json.dumps(payload)[:400]}")
-          served = {t['name'] for t in payload['result']['tools']}
+          served = set()
+          for tool in payload['result']['tools']:
+              served.add(tool['name'])
           if not served:
               sys.exit('::error::tools/list returned no tools.')
 
