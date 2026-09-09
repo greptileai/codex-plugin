@@ -30,9 +30,6 @@ Ask Codex to sign in with Greptile or review your current branch:
   branch and review instructions.
 - **login** — Sign the bundled CLI in through browser OAuth.
 
-The previous `check-pr`, `cli-review`, and `greploop` skills are no longer bundled.
-Use `review` for local reviews and the MCP tools for PR feedback and knowledge search.
-
 ## Tools
 
 ### Pull requests
@@ -107,7 +104,8 @@ Event-specific fields are fixed values: `method`, `exit_code`, `reason`, the
 version strings on an update, and the name of the Greptile-authored skill on
 the two skill events.
 
-When invoked without a TTY, the CLI cannot ask for telemetry consent. It falls back to **anonymous mode**: a random
+When invoked without a TTY, the CLI cannot ask for telemetry consent.
+It falls back to **anonymous mode**: a random
 `cli:<uuid>` stored in `telemetry.json`, no account token attached, and no
 profile built on the other end. If you have separately opted in from a
 standalone `greptile` on the same machine, that decision carries over here and
