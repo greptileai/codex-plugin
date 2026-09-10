@@ -8,6 +8,11 @@ and [error reference](https://developers.openai.com/plugins/deploy/submission-er
 prepared using OpenAI's [submission skill](https://github.com/openai/plugins/blob/main/plugins/openai-developers/skills/chatgpt-app-submission/SKILL.md).
 Expected outputs describe acceptance criteria; they are not a record of completed tests.
 
+PR checks validate the submission structure and warn about production annotation
+drift, so preparation can merge before the server deployment. On main, scheduled
+and manual MCP checks fail on that drift. A green PR check is not proof that the
+production server is ready for submission.
+
 ## Prepare and upload
 
 1. Confirm production `tools/list` advertises the same tool names and annotation

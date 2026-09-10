@@ -112,9 +112,12 @@ jobs:
           for name, tool in submission['tools'].items():
               for hint in ('readOnlyHint', 'openWorldHint', 'destructiveHint'):
                   assert type(tool['annotations'][hint]) is bool
-                  assert served_tools[name].get('annotations', {}).get(hint) == tool['annotations'][hint], (
-                      f'{name}.{hint} differs from production; deploy matching server metadata before submitting'
-                  )
+                  if served_tools[name].get('annotations', {}).get(hint) != tool['annotations'][hint]:
+                      message = f'{name}.{hint} differs from production; deploy matching server metadata before submitting'
+                      if os.environ.get('GITHUB_EVENT_NAME') == 'pull_request':
+                          print(f'::warning::{message}')
+                      else:
+                          sys.exit(f'::error::{message}')
               for field in ('read_only_justification', 'open_world_justification', 'destructive_justification'):
                   assert tool['justifications'][field].strip()
           for case in submission['test_cases']:
