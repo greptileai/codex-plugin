@@ -85,9 +85,8 @@ jobs:
               payload = json.load(fh)
           if 'result' not in payload:
               sys.exit(f"::error::tools/list returned no result: {json.dumps(payload)[:400]}")
-          served = set()
-          for tool in payload['result']['tools']:
-              served.add(tool['name'])
+          served_tools = {tool['name']: tool for tool in payload['result']['tools']}
+          served = set(served_tools)
           if not served:
               sys.exit('::error::tools/list returned no tools.')
 
@@ -108,9 +107,12 @@ jobs:
           assert set(submission['tools']) == served, 'Submission tool names differ from tools/list'
           assert len(submission['test_cases']) == 5
           assert len(submission['negative_test_cases']) == 3
-          for tool in submission['tools'].values():
+          for name, tool in submission['tools'].items():
               for hint in ('readOnlyHint', 'openWorldHint', 'destructiveHint'):
                   assert type(tool['annotations'][hint]) is bool
+                  assert served_tools[name].get('annotations', {}).get(hint) == tool['annotations'][hint], (
+                      f'{name}.{hint} differs from production; deploy matching server metadata before submitting'
+                  )
               for field in ('read_only_justification', 'open_world_justification', 'destructive_justification'):
                   assert tool['justifications'][field].strip()
           for case in submission['test_cases']:
