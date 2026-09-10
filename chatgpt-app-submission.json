@@ -263,43 +263,43 @@
   },
   "test_cases": [
     {
-      "description": "Discover repositories and inspect an existing review.",
+      "description": "Read existing feedback on the demo pull request.",
       "user_prompt": "Show the latest Greptile feedback on PR #1 in greptile-openai-demo/review-demo.",
       "file_attachment_urls": null,
-      "tools_triggered": "get_me, list_repositories, list_code_reviews, get_code_review, get_merge_request, list_merge_request_comments",
-      "expected_output": "Identifies the accessible demo organization and repository, retrieves the latest completed review, and explains the pagination finding with its code location.",
+      "tools_triggered": "get_merge_request",
+      "expected_output": "Summarizes the stored Greptile feedback for the demo PR with the reported code locations. A direct PR lookup or a review/comment lookup is acceptable; identity and repository discovery are only needed if identifiers are missing. Does not start a new review or claim the stored findings were revalidated.",
       "expected_output_url": null
     },
     {
       "description": "Start a hosted review and distinguish acceptance from completion.",
       "user_prompt": "Run a new Greptile review of PR #1 in greptile-openai-demo/review-demo.",
       "file_attachment_urls": null,
-      "tools_triggered": "list_repositories, trigger_code_review, list_code_reviews, get_code_review",
-      "expected_output": "Requests the review only after the explicit user instruction, reports that it was queued, then checks status and reports findings when complete; it does not merge or edit the pull request.",
+      "tools_triggered": "trigger_code_review, list_code_reviews",
+      "expected_output": "Requests one review of the specified demo PR and distinguishes a queued request from a completed review. Checks status; if still running, reports that honestly rather than requiring completion within the conversation. If completed, summarizes the returned result. Repository discovery and additional result lookups are optional as needed. Does not merge or edit the PR.",
       "expected_output_url": null
     },
     {
       "description": "Save and retrieve an inactive review rule.",
       "user_prompt": "Save an inactive custom instruction: Validate pagination limits before reading tasks. Then find that instruction and show it to me.",
       "file_attachment_urls": null,
-      "tools_triggered": "create_custom_context, search_custom_context, get_custom_context",
-      "expected_output": "Creates a CUSTOM_INSTRUCTION with status INACTIVE, retrieves its saved text and identifier, and explains that an inactive rule will not affect reviews.",
+      "tools_triggered": "create_custom_context, search_custom_context",
+      "expected_output": "Creates the requested instruction with status INACTIVE in the demo organization, then retrieves it and reports its saved text and identifier. Search or list/detail lookups are acceptable. Does not activate the rule or start a review.",
       "expected_output_url": null
     },
     {
-      "description": "Read repository knowledge or handle its absence.",
-      "user_prompt": "Use Greptile to explain how authentication works in greptile-openai-demo/review-demo.",
+      "description": "Search existing demo review feedback.",
+      "user_prompt": "Find Greptile comments about pagination on PR #1 in greptile-openai-demo/review-demo and explain what they recommend.",
       "file_attachment_urls": null,
-      "tools_triggered": "list_knowledge_bases, search_knowledge_base, list_knowledge_base_documents, get_knowledge_base_document",
-      "expected_output": "If published documentation is available, searches and reads it and cites the returned paths; if no knowledge base is available, states that limitation and asks to inspect repository source instead of inventing documentation.",
+      "tools_triggered": "list_merge_request_comments",
+      "expected_output": "Finds and summarizes pagination-related feedback belonging to the specified demo PR, using a PR lookup, comment listing, or comment search as appropriate. Grounds the explanation in returned comments and code locations. Does not require a published knowledge base, invent findings, or change the PR.",
       "expected_output_url": null
     },
     {
-      "description": "Inspect review analytics and an empty filter result.",
-      "user_prompt": "Show this month\u2019s review activity and open findings for greptile-openai-demo/review-demo, then search the findings for nonexistent-demo-marker.",
+      "description": "Read demo review analytics for a fixed period.",
+      "user_prompt": "Show Greptile review activity and findings for greptile-openai-demo/review-demo from September 1 through September 30, 2026.",
       "file_attachment_urls": null,
-      "tools_triggered": "list_analytics_filter_options, get_analytics_overview, list_analytics_findings",
-      "expected_output": "Uses the exact accessible repository name, reports the returned date range and review metrics, and clearly reports no matching findings for the nonexistent marker.",
+      "tools_triggered": "get_analytics_overview, list_analytics_findings",
+      "expected_output": "Reports the requested repository and date range with the metrics and findings returned by Greptile. Discovers filter identifiers only when needed. No particular count or finding status is required; clearly reports empty results without inventing activity.",
       "expected_output_url": null
     }
   ],
@@ -314,10 +314,10 @@
     },
     {
       "description": "Local code edit without review.",
-      "user_prompt": "Rename this local variable from count to taskCount.",
+      "user_prompt": "Rename count to taskCount in this JavaScript snippet: const count = tasks.length; console.log(count);",
       "file_attachment_urls": null,
       "tools_triggered": null,
-      "expected_output": "Uses the local editor if available and does not invoke Greptile or start a review.",
+      "expected_output": "Returns the renamed snippet without invoking Greptile or starting a review.",
       "expected_output_url": null
     },
     {
