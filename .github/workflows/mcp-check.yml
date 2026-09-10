@@ -4,10 +4,12 @@ on:
     branches: [main]
     paths:
       - 'plugins/**'
+      - 'chatgpt-app-submission.json'
       - '.github/workflows/mcp-check.yml'
   pull_request:
     paths:
       - 'plugins/**'
+      - 'chatgpt-app-submission.json'
       - '.github/workflows/mcp-check.yml'
   schedule:
     - cron: '17 8 * * *'
@@ -83,9 +85,10 @@ jobs:
               payload = json.load(fh)
           if 'result' not in payload:
               sys.exit(f"::error::tools/list returned no result: {json.dumps(payload)[:400]}")
-          served = set()
+          served_tools = {}
           for tool in payload['result']['tools']:
-              served.add(tool['name'])
+              served_tools[tool['name']] = tool
+          served = set(served_tools)
           if not served:
               sys.exit('::error::tools/list returned no tools.')
 
@@ -102,4 +105,23 @@ jobs:
           if missing or extra:
               sys.exit(1)
           print(f"README documents all {len(served)} served tools.")
+          submission = json.load(open('chatgpt-app-submission.json'))
+          assert set(submission['tools']) == served, 'Submission tool names differ from tools/list'
+          assert len(submission['test_cases']) == 5
+          assert len(submission['negative_test_cases']) == 3
+          for name, tool in submission['tools'].items():
+              for hint in ('readOnlyHint', 'openWorldHint', 'destructiveHint'):
+                  assert type(tool['annotations'][hint]) is bool
+                  if served_tools[name].get('annotations', {}).get(hint) != tool['annotations'][hint]:
+                      message = f'{name}.{hint} differs from production; deploy matching server metadata before submitting'
+                      if os.environ.get('GITHUB_EVENT_NAME') == 'pull_request':
+                          print(f'::warning::{message}')
+                      else:
+                          sys.exit(f'::error::{message}')
+              for field in ('read_only_justification', 'open_world_justification', 'destructive_justification'):
+                  assert tool['justifications'][field].strip()
+          for case in submission['test_cases']:
+              assert set(map(str.strip, case['tools_triggered'].split(','))) <= served
+          assert all(case['tools_triggered'] is None for case in submission['negative_test_cases'])
+          print('Submission has explicit annotations, justifications, five positive cases, and three negative cases.')
           PY
