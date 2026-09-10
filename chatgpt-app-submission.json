@@ -1,0 +1,332 @@
+{
+  "$schema": "https://developers.openai.com/apps-sdk/schemas/chatgpt-app-submission.v1.json",
+  "schema_version": 1,
+  "app_info": {
+    "display_name": "Greptile",
+    "subtitle": "Review code and PR feedback",
+    "description": "Read Greptile review results, request reviews of GitHub pull requests and GitLab merge requests, manage saved review rules, and search repository knowledge bases. Explore review activity and findings with analytics. In Codex, the bundled CLI can also review a local working branch; it requires Node.js 22 or later and a local Git checkout. CLI and MCP authentication are separate.",
+    "category": "DEVELOPER_TOOLS"
+  },
+  "tools": {
+    "get_me": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Retrieves the signed-in account identity and organization memberships without changing either.",
+        "open_world_justification": "Reads data accessible within the connected Greptile account and does not change public or third-party state.",
+        "destructive_justification": "Does not delete, overwrite, publish, or revoke access to data."
+      }
+    },
+    "list_repositories": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Lists accessible repository identifiers and review settings without changing them.",
+        "open_world_justification": "Reads data accessible within the connected Greptile account and does not change public or third-party state.",
+        "destructive_justification": "Does not delete, overwrite, publish, or revoke access to data."
+      }
+    },
+    "list_custom_context": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Lists saved rules and patterns with metadata and counts without editing them.",
+        "open_world_justification": "Reads data accessible within the connected Greptile account and does not change public or third-party state.",
+        "destructive_justification": "Does not delete, overwrite, publish, or revoke access to data."
+      }
+    },
+    "get_custom_context": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Retrieves one saved rule or pattern and linked comment references without modifying them.",
+        "open_world_justification": "Reads data accessible within the connected Greptile account and does not change public or third-party state.",
+        "destructive_justification": "Does not delete, overwrite, publish, or revoke access to data."
+      }
+    },
+    "search_custom_context": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Searches saved rule and pattern text without changing the records.",
+        "open_world_justification": "Reads data accessible within the connected Greptile account and does not change public or third-party state.",
+        "destructive_justification": "Does not delete, overwrite, publish, or revoke access to data."
+      }
+    },
+    "list_merge_requests": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Lists saved pull request and merge request metadata without changing source-control state.",
+        "open_world_justification": "Reads data accessible within the connected Greptile account and does not change public or third-party state.",
+        "destructive_justification": "Does not delete, overwrite, publish, or revoke access to data."
+      }
+    },
+    "list_pull_requests": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Lists saved pull request metadata using the same read operation as list_merge_requests.",
+        "open_world_justification": "Reads data accessible within the connected Greptile account and does not change public or third-party state.",
+        "destructive_justification": "Does not delete, overwrite, publish, or revoke access to data."
+      }
+    },
+    "get_merge_request": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Retrieves saved pull request details, review results, comments, and citations without updating them.",
+        "open_world_justification": "Reads data accessible within the connected Greptile account and does not change public or third-party state.",
+        "destructive_justification": "Does not delete, overwrite, publish, or revoke access to data."
+      }
+    },
+    "list_merge_request_comments": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Retrieves saved comments and their addressed flags without posting or resolving comments.",
+        "open_world_justification": "Reads data accessible within the connected Greptile account and does not change public or third-party state.",
+        "destructive_justification": "Does not delete, overwrite, publish, or revoke access to data."
+      }
+    },
+    "list_code_reviews": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Lists saved review runs and statuses without starting another review.",
+        "open_world_justification": "Reads data accessible within the connected Greptile account and does not change public or third-party state.",
+        "destructive_justification": "Does not delete, overwrite, publish, or revoke access to data."
+      }
+    },
+    "get_code_review": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Retrieves a saved review body, status, and citations without modifying the review.",
+        "open_world_justification": "Reads data accessible within the connected Greptile account and does not change public or third-party state.",
+        "destructive_justification": "Does not delete, overwrite, publish, or revoke access to data."
+      }
+    },
+    "search_greptile_comments": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Searches saved Greptile comments across pull request and CLI reviews without modifying them.",
+        "open_world_justification": "Reads data accessible within the connected Greptile account and does not change public or third-party state.",
+        "destructive_justification": "Does not delete, overwrite, publish, or revoke access to data."
+      }
+    },
+    "list_knowledge_bases": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Lists accessible repositories with published knowledge-base data without generating or editing documents.",
+        "open_world_justification": "Reads data accessible within the connected Greptile account and does not change public or third-party state.",
+        "destructive_justification": "Does not delete, overwrite, publish, or revoke access to data."
+      }
+    },
+    "list_knowledge_base_documents": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Lists paths in a published repository knowledge base without changing its contents.",
+        "open_world_justification": "Reads data accessible within the connected Greptile account and does not change public or third-party state.",
+        "destructive_justification": "Does not delete, overwrite, publish, or revoke access to data."
+      }
+    },
+    "get_knowledge_base_document": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Reads a published knowledge-base document without modifying it.",
+        "open_world_justification": "Reads data accessible within the connected Greptile account and does not change public or third-party state.",
+        "destructive_justification": "Does not delete, overwrite, publish, or revoke access to data."
+      }
+    },
+    "search_knowledge_base": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Searches published knowledge-base text and returns matching excerpts without changing documents.",
+        "open_world_justification": "Reads data accessible within the connected Greptile account and does not change public or third-party state.",
+        "destructive_justification": "Does not delete, overwrite, publish, or revoke access to data."
+      }
+    },
+    "list_analytics_filter_options": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Lists available team, repository, or author filter values without changing records.",
+        "open_world_justification": "Reads data accessible within the connected Greptile account and does not change public or third-party state.",
+        "destructive_justification": "Does not delete, overwrite, publish, or revoke access to data."
+      }
+    },
+    "get_analytics_overview": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Computes review metrics from existing records without changing reviews or settings.",
+        "open_world_justification": "Reads data accessible within the connected Greptile account and does not change public or third-party state.",
+        "destructive_justification": "Does not delete, overwrite, publish, or revoke access to data."
+      }
+    },
+    "list_analytics_findings": {
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Retrieves existing findings and aggregate counts without editing or resolving findings.",
+        "open_world_justification": "Reads data accessible within the connected Greptile account and does not change public or third-party state.",
+        "destructive_justification": "Does not delete, overwrite, publish, or revoke access to data."
+      }
+    },
+    "trigger_code_review": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": true,
+        "destructiveHint": true
+      },
+      "justifications": {
+        "read_only_justification": "Starts an asynchronous review that consumes review credits and persists results.",
+        "open_world_justification": "The review can post or update feedback on the connected GitHub pull request or GitLab merge request, including public repositories.",
+        "destructive_justification": "The review can overwrite existing review feedback and publish comments; repository access and organization review-trigger policy are checked before dispatch."
+      }
+    },
+    "create_custom_context": {
+      "annotations": {
+        "readOnlyHint": false,
+        "openWorldHint": false,
+        "destructiveHint": false
+      },
+      "justifications": {
+        "read_only_justification": "Creates a persistent rule or pattern that can affect subsequent reviews in the selected organization.",
+        "open_world_justification": "Stores context within the connected Greptile organization without publishing content or starting a review.",
+        "destructive_justification": "Adds a new context record without deleting or overwriting an existing record."
+      }
+    }
+  },
+  "test_cases": [
+    {
+      "description": "Discover repositories and inspect an existing review.",
+      "user_prompt": "Show the latest Greptile feedback on PR #1 in greptile-openai-demo/review-demo.",
+      "file_attachment_urls": null,
+      "tools_triggered": "get_me, list_repositories, list_code_reviews, get_code_review, get_merge_request, list_merge_request_comments",
+      "expected_output": "Identifies the accessible demo organization and repository, retrieves the latest completed review, and explains the pagination finding with its code location.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Start a hosted review and distinguish acceptance from completion.",
+      "user_prompt": "Run a new Greptile review of PR #1 in greptile-openai-demo/review-demo.",
+      "file_attachment_urls": null,
+      "tools_triggered": "list_repositories, trigger_code_review, list_code_reviews, get_code_review",
+      "expected_output": "Requests the review only after the explicit user instruction, reports that it was queued, then checks status and reports findings when complete; it does not merge or edit the pull request.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Save and retrieve an inactive review rule.",
+      "user_prompt": "Save an inactive custom instruction: Validate pagination limits before reading tasks. Then find that instruction and show it to me.",
+      "file_attachment_urls": null,
+      "tools_triggered": "create_custom_context, search_custom_context, get_custom_context",
+      "expected_output": "Creates a CUSTOM_INSTRUCTION with status INACTIVE, retrieves its saved text and identifier, and explains that an inactive rule will not affect reviews.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Read repository knowledge or handle its absence.",
+      "user_prompt": "Use Greptile to explain how authentication works in greptile-openai-demo/review-demo.",
+      "file_attachment_urls": null,
+      "tools_triggered": "list_knowledge_bases, search_knowledge_base, list_knowledge_base_documents, get_knowledge_base_document",
+      "expected_output": "If published documentation is available, searches and reads it and cites the returned paths; if no knowledge base is available, states that limitation and asks to inspect repository source instead of inventing documentation.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Inspect review analytics and an empty filter result.",
+      "user_prompt": "Show this month\u2019s review activity and open findings for greptile-openai-demo/review-demo, then search the findings for nonexistent-demo-marker.",
+      "file_attachment_urls": null,
+      "tools_triggered": "list_analytics_filter_options, get_analytics_overview, list_analytics_findings",
+      "expected_output": "Uses the exact accessible repository name, reports the returned date range and review metrics, and clearly reports no matching findings for the nonexistent marker.",
+      "expected_output_url": null
+    }
+  ],
+  "negative_test_cases": [
+    {
+      "description": "General programming explanation.",
+      "user_prompt": "Explain how JavaScript promises work.",
+      "file_attachment_urls": null,
+      "tools_triggered": null,
+      "expected_output": "Answers without invoking Greptile because no connected repository or review data is requested.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Local code edit without review.",
+      "user_prompt": "Rename this local variable from count to taskCount.",
+      "file_attachment_urls": null,
+      "tools_triggered": null,
+      "expected_output": "Uses the local editor if available and does not invoke Greptile or start a review.",
+      "expected_output_url": null
+    },
+    {
+      "description": "Unrelated travel request.",
+      "user_prompt": "Find a hotel in Paris for next weekend.",
+      "file_attachment_urls": null,
+      "tools_triggered": null,
+      "expected_output": "Does not invoke Greptile because travel planning is outside its capabilities.",
+      "expected_output_url": null
+    }
+  ]
+}

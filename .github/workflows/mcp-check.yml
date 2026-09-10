@@ -4,10 +4,12 @@ on:
     branches: [main]
     paths:
       - 'plugins/**'
+      - 'chatgpt-app-submission.json'
       - '.github/workflows/mcp-check.yml'
   pull_request:
     paths:
       - 'plugins/**'
+      - 'chatgpt-app-submission.json'
       - '.github/workflows/mcp-check.yml'
   schedule:
     - cron: '17 8 * * *'
@@ -102,4 +104,17 @@ jobs:
           if missing or extra:
               sys.exit(1)
           print(f"README documents all {len(served)} served tools.")
+          submission = json.load(open('chatgpt-app-submission.json'))
+          assert set(submission['tools']) == served, 'Submission tool names differ from tools/list'
+          assert len(submission['test_cases']) == 5
+          assert len(submission['negative_test_cases']) == 3
+          for tool in submission['tools'].values():
+              for hint in ('readOnlyHint', 'openWorldHint', 'destructiveHint'):
+                  assert type(tool['annotations'][hint]) is bool
+              for field in ('read_only_justification', 'open_world_justification', 'destructive_justification'):
+                  assert tool['justifications'][field].strip()
+          for case in submission['test_cases']:
+              assert set(map(str.strip, case['tools_triggered'].split(','))) <= served
+          assert all(case['tools_triggered'] is None for case in submission['negative_test_cases'])
+          print('Submission has explicit annotations, justifications, five positive cases, and three negative cases.')
           PY

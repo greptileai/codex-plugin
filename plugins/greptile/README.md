@@ -2,7 +2,7 @@
 
 [Greptile](https://greptile.com) is an AI code review agent for GitHub and GitLab that automatically reviews pull requests. This plugin gives Codex two ways to work with it:
 
-- the **Greptile MCP server**, for reading and resolving review results, and for searching your organization's knowledge base and coding patterns
+- the **Greptile MCP server**, for reading review results, and for searching your organization's knowledge base and coding patterns
 - the **Greptile CLI**, for dispatching a review of your working branch before a pull request exists
 
 They are two ends of one pipeline. The CLI dispatches reviews; the MCP server reads them back — both the ones the CLI dispatched (`source: "headless"`) and the ones Greptile ran on your pull requests (`source: "pr"`).
@@ -32,10 +32,14 @@ Ask Codex to sign in with Greptile or review your current branch:
 
 ## Tools
 
+### Account and repositories
+- `get_me` - Identify your account and available organizations
+- `list_repositories` - Discover accessible repositories and identifiers for the other tools
+
 ### Pull requests
 - `list_merge_requests` / `list_pull_requests` - List PRs, filtered by repository, branch, author, or state
-- `get_merge_request` - Detailed PR info, including which review comments have been addressed by later commits
-- `list_merge_request_comments` - All comments on a PR, with Greptile, human, and other bot comments distinguished by `sourceType`
+- `get_merge_request` - Detailed PR info, including stored addressed flags and commits since the latest review comment
+- `list_merge_request_comments` - All comments on a PR, with Greptile comments identified by `isGreptileComment`
 
 ### Code reviews
 - `list_code_reviews` - List code reviews, filtered by repository or status
@@ -51,7 +55,7 @@ Ask Codex to sign in with Greptile or review your current branch:
 
 ### Custom context
 - `list_custom_context` - Your organization's coding patterns and rules
-- `get_custom_context` - Details for one entry, including evidence and linked comments
+- `get_custom_context` - Details for one entry and linked comment references; evidence bodies are not returned
 - `search_custom_context` - Search entries by content
 - `create_custom_context` - Create a new entry, either a custom instruction (the default) or a pattern
 
