@@ -18,4 +18,8 @@ Both authenticate over OAuth against your Greptile account. There is no API key 
 
 See [`plugins/greptile`](./plugins/greptile) for setup, workflows, and the full tool list.
 
-For directory submission artifacts and checks, see [SUBMISSION.md](./SUBMISSION.md).
+To package the plugin from a committed revision, including its bundled CLI:
+
+```sh
+git archive --format=zip --output=/tmp/greptile-plugin.zip HEAD:plugins/greptile
+```
