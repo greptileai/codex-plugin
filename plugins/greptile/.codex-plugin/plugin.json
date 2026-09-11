@@ -1,7 +1,7 @@
 {
   "name": "greptile",
-  "version": "0.2.0",
-  "description": "Review your working branch, read Greptile review results, and search your organization’s knowledge base from Codex.",
+  "version": "1.2.3",
+  "description": "AI code review agent for GitHub and GitLab. View Greptile's PR review comments, run reviews on your working branch, and search your organization's knowledge base and coding patterns, directly from Codex.",
   "author": {
     "name": "Greptile",
     "url": "https://www.greptile.com/"
@@ -19,8 +19,8 @@
   "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "Greptile",
-    "shortDescription": "Review code and explore Greptile feedback",
-    "longDescription": "Review your working branch, read Greptile review results, and search your organization’s knowledge base from Codex.",
+    "shortDescription": "AI code review for GitHub and GitLab",
+    "longDescription": "AI code review agent for GitHub and GitLab. View Greptile's PR review comments, run reviews on your working branch, and search your organization's knowledge base and coding patterns, directly from Codex.",
     "developerName": "Greptile",
     "category": "Developer Tools",
     "capabilities": [

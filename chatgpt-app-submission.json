@@ -4,7 +4,7 @@
   "app_info": {
     "display_name": "Greptile",
     "subtitle": "Review code and PR feedback",
-    "description": "Read Greptile review results, request reviews of GitHub pull requests and GitLab merge requests, manage saved review rules, and search repository knowledge bases. Explore review activity and findings with analytics. In Codex, the bundled CLI can also review a local working branch; it requires Node.js 22 or later and a local Git checkout. CLI and MCP authentication are separate.",
+    "description": "AI code review agent for GitHub and GitLab. View Greptile's PR review comments, run reviews on your working branch, and search your organization's knowledge base and coding patterns, directly from Codex.",
     "category": "DEVELOPER_TOOLS"
   },
   "tools": {
