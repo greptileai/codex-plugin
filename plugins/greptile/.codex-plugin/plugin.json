@@ -1,6 +1,6 @@
 {
   "name": "greptile",
-  "version": "0.2.0",
+  "version": "1.2.3",
   "description": "AI code review agent for GitHub and GitLab. View Greptile's PR review comments, run reviews on your working branch, and search your organization's knowledge base and coding patterns, directly from Codex.",
   "author": {
     "name": "Greptile",
@@ -35,7 +35,7 @@
     "logo": "./assets/logo.svg",
     "defaultPrompt": [
       "Review my current branch with Greptile",
-      "Show Greptile\u2019s comments on this PR",
+      "Show Greptile’s comments on this PR",
       "Search our knowledge base for how authentication works"
     ]
   }
