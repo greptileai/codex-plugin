@@ -280,10 +280,10 @@
     },
     {
       "description": "Save and retrieve an inactive review rule.",
-      "user_prompt": "Save an inactive custom instruction: Validate pagination limits before reading tasks. Then find that instruction and show it to me.",
+      "user_prompt": "Save an inactive custom instruction: Validate pagination limits before reading tasks. Then retrieve the saved instruction and show it to me.",
       "file_attachment_urls": null,
-      "tools_triggered": "create_custom_context, search_custom_context",
-      "expected_output": "Creates the requested instruction with status INACTIVE in the demo organization, then retrieves it and reports its saved text and identifier. Search or list/detail lookups are acceptable. Does not activate the rule or start a review.",
+      "tools_triggered": "create_custom_context, get_custom_context",
+      "expected_output": "Creates the requested instruction with status INACTIVE in the demo organization, retrieves the saved record using its returned identifier, and reports its text, identifier, and inactive status. Does not activate the rule or start a review.",
       "expected_output_url": null
     },
     {
